@@ -1,0 +1,13 @@
+RingoJS Package registry server application
+===============================================
+
+requires
+
+  * hns/stick
+  * hns/ringo-storable
+  * grob/ringo-sqlstore
+  * grob/ringo-semver
+
+create database `rpr`
+
+edit config.js database connection settings
