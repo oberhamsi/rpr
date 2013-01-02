@@ -1,6 +1,6 @@
-var {indexDir} = require("./config");
+var {indexDir} = require("./config/config");
 var {Index} = require("lucindex");
-var {Package} = require("./model");
+var {Package} = require("./model/package");
 var {Document, Field, NumericField} = org.apache.lucene.document;
 var {MultiFieldQueryParser} = org.apache.lucene.queryParser;
 var {Version} = org.apache.lucene.util;
@@ -27,8 +27,10 @@ var analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(Version.LUCENE_3
     "name_ngrams": new NGramAnalyzer(3, 5)
 });
 
+var standardAnalyzer = new StandardAnalyzer(Version.LUCENE_35);
+
 var manager = exports.manager = module.singleton("index", function() {
-    return Index.createIndex(indexDir, "index", analyzer);
+    return Index.createIndex(indexDir, "rpr", analyzer);
 });
 
 var createDocument = exports.createDocument = function(pkg) {
@@ -62,11 +64,11 @@ var createDocument = exports.createDocument = function(pkg) {
 
 exports.search = function(q, length, offset) {
     var query = null;
-    var sort = new Sort();
+    var sort = new Sort(SortField.FIELD_SCORE);
     if (typeof(q) === "string" && q.length > 0) {
         var parser = new MultiFieldQueryParser(Version.LUCENE_35,
                  ["name", "name_ngrams", "description", "keyword", "author", "maintainer", "contributor"],
-                analyzer, {
+                standardAnalyzer, {
                     "name": Float.parseFloat(2),
                     "keyword": Float.parseFloat(1.5)
                 });
