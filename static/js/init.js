@@ -10,15 +10,19 @@ require.config({
         "jquery": "./lib/jquery",
         "underscore": "./lib/lodash",
         "backbone": "./lib/backbone",
-        "swig": "./lib/swig"
+        "swig": "./lib/swig",
+        "md5": "./lib/md5-min"
     },
 
 	// The shim config allows us to configure dependencies for
 	// scripts that do not call define() to register a module
 	"shim": {
-        "jquery": {
+      "jquery": {
             "exports": "$"
-        },
+      },
+      "md5": {
+         "exports": "hex_md5"
+      },
 		"underscore": {
 			"exports": '_'
 		},
@@ -28,10 +32,10 @@ require.config({
 				"jquery"
 			],
 			"exports": "Backbone"
-        },
-        "swig": {
-            "exports": "swig"
-        }
+      },
+      "swig": {
+         "exports": "swig"
+      }
 	}
 });
 

@@ -3,9 +3,17 @@ define([
     "backbone",
     "app",
     "swig",
+    "md5",
     "views/view.details",
     "views/view.versions"
-], function(_, Backbone, app, swig, DetailsView, VersionsView) {
+], function(_, Backbone, app, swig, md5, DetailsView, VersionsView) {
+
+    var emailToGravatar = function(email) {
+        if (!email) return null;
+        var emailHash = md5(email.replace(/\s/g, '').toLowerCase());
+        return "http://www.gravatar.com/avatar/" + emailHash + "?s=24";
+
+    }
 
     var PackageView = Backbone.View.extend({
         "tagName": "li",
@@ -20,7 +28,13 @@ define([
     });
 
     PackageView.prototype.render = function() {
-        this.$el.append(this.template(this.model.toJSON()));
+        var ctx = this.model.toJSON();
+        // merge author into maintainers
+        ctx.maintainers.push(ctx.author);
+        _.each(ctx.maintainers, function(m) {
+            m.gravatar = emailToGravatar(m.email);
+        });
+        this.$el.append(this.template(ctx));
         return this;
     };
 
