@@ -3,17 +3,9 @@ define([
     "backbone",
     "app",
     "swig",
-    "md5",
     "views/view.details",
     "views/view.versions"
-], function(_, Backbone, app, swig, md5, DetailsView, VersionsView) {
-
-    var emailToGravatar = function(email) {
-        if (!email) return null;
-        var emailHash = md5(email.replace(/\s/g, '').toLowerCase());
-        return "http://www.gravatar.com/avatar/" + emailHash + "?s=24";
-
-    }
+], function(_, Backbone, app, swig, DetailsView, VersionsView) {
 
     var PackageView = Backbone.View.extend({
         "tagName": "li",
@@ -29,11 +21,8 @@ define([
 
     PackageView.prototype.render = function() {
         var ctx = this.model.toJSON();
-        // merge author into maintainers
+        // put author into maintainers
         ctx.maintainers.push(ctx.author);
-        _.each(ctx.maintainers, function(m) {
-            m.gravatar = emailToGravatar(m.email);
-        });
         this.$el.append(this.template(ctx));
         return this;
     };
@@ -72,7 +61,7 @@ define([
         var view = new View({
             "model": this.model
         });
-        var $tab = this.$(".tab").html(view.render().el).hide();
+        var $tab = this.$(".details").html(view.render().el).hide();
         if (this.current == null) {
             $tab.slideDown("fast");
         } else {
