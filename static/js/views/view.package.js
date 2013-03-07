@@ -11,8 +11,6 @@ define([
         "tagName": "li",
         "template": swig.compile(document.getElementById("tmpl-package").innerHTML),
         "events": {
-            "click .menu li.details": "toggleDetails",
-            "click .menu li.versions": "toggleVersions",
             "click h2 a": function(event) {
                 app.router.navigate($(event.target).attr("href"), true);
                 return false;
@@ -31,26 +29,25 @@ define([
             return;
         }
         if (this.current != null) {
-            this.toggleTab(this.$(".menu li.expanded"), this.current.constructor);
+            this.toggleTab(this.current.constructor);
         } else {
-            this.toggleTab(this.$(".menu li.details"), DetailsView);
+            this.toggleTab(DetailsView);
         }
     };
 
     PackageView.prototype.toggleDetails = function(event) {
         event.stopImmediatePropagation();
-        this.toggleTab($(event.target), DetailsView);
+        this.toggleTab(DetailsView);
     };
 
     PackageView.prototype.toggleVersions = function(event) {
         event.stopImmediatePropagation();
-        this.toggleTab($(event.target), VersionsView);
+        this.toggleTab(VersionsView);
     };
 
-    PackageView.prototype.toggleTab = function($menuItem, View) {
+    PackageView.prototype.toggleTab = function(View) {
         if (this.current != null) {
             if (this.current instanceof View) {
-                $menuItem.removeClass("expanded");
                 this.current.close(true);
                 this.current = null;
                 return;
@@ -58,7 +55,6 @@ define([
                 this.current.close();
             }
         }
-        $menuItem.addClass("expanded").siblings().removeClass("expanded");
         var view = new View({
             "model": this.model
         });

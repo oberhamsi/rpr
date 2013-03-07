@@ -32,32 +32,25 @@
     </div>
 
     <script id="tmpl-package" type="text/html">
-        <h2><a href="/packages/{{ name }}">{{ name }}</a> {{ latest }}</h2>
+        <h2><a href="/packages/{{ name }}">{{ name }}</a> {{ modified | date("d. M. Y, H:i") }}</h2>
         <p>{{ description }}</p>
-        <ul class="menu">
-            <li class="details">Details</li>
-            <li class="versions">Versions</li>
-        </ul>
         <div class="tab"></div>
     </script>
 
     <script id="tmpl-details" type="text/html">
+        <dt>Download</dt>
+        <dd><a href="/download/{{ version.filename }}">{{ versions[0].filename }}</a> ({{ versions[0].filesize | filesize }})</dd>
+        <dt>MD5 Checksum</dt>
+        <dd> {{ checksums.md5 }}
+        </dd>
+
         <dt>Keywords</dt>
         <dd>
             {% for keyword in keywords %}
                 <a href="/search/{{ keyword | url_encode }}">{{ keyword }}</a>
             {% endfor %}
         </dd>
-        {% if engines|length > 0 %}
-            <dt>Engines</dt>
-            <dd>
-                <ul>
-                {% for spec in engines %}
-                    <li>{{ loop.key }} ({{ spec }})</li>
-                {% endfor %}
-                </ul>
-            </dd>
-        {% endif %}
+
         <dt>Dependencies</dt>
         <dd>
             <ul>
@@ -70,18 +63,7 @@
             {% endif %}
             </ul>
         </dd>
-        <dt>Author</dt>
-        <dd>
-            {% if author.web %}
-                <a href="{{ author.web }}">{{ author.name }}</a>
-            {% else %}
-                {{ author.name }}
-            {% endif %}
-        </dd>
-        {% if author.homepage %}
-            <dt>Website</dt>
-            <dd><a href="{{ author.homepage }}">{{ author.homepage }}</a></dd>
-        {% endif %}
+
         {% if repositories|length > 0 %}
             <dt>Repositories</dt>
             <dd>
@@ -102,8 +84,19 @@
                 </ul>
             </dd>
         {% endif %}
-        <dt>Last modified</dt>
-        <dd>{{ modified | date("d. M. Y, H:i") }}</dd>
+        <dt>Author</dt>
+        <dd>
+            {% if author.web %}
+                <a href="{{ author.web }}">{{ author.name }}</a>
+            {% else %}
+                {{ author.name }}
+            {% endif %}
+        </dd>
+        {% if author.homepage %}
+            <dt>Website</dt>
+            <dd><a href="{{ author.homepage }}">{{ author.homepage }}</a></dd>
+        {% endif %}
+
         {% if maintainers|length > 0 %}
             <dt>Maintainers</dt>
             <dd>
@@ -120,89 +113,10 @@
                 </ul>
             </dd>
         {% endif %}
-        {% if contributors|length > 0 %}
-            <dt>Contributors</dt>
-            <dd>
-                <ul>
-                {% for contributor in contributors %}
-                    <li>
-                        {% if contributor.web %}
-                            <a href="{{ contributor.web }}">{{ contributor.name }}</a>
-                        {% else %}
-                            {{ contributor.name }}
-                        {% endif %}
-                    </li>
-                {% endfor %}
-                </ul>
-            </dd>
-        {% endif %}
     </script>
 
     <script id="tmpl-versions" type="text/html">
-        {% for version in versions %}
-            <dt>{{ version.version }}</dt>
-            <dd>
-                <dl>
-                    <dt>Published</dt>
-                    <dd>{{ version.modified | date("d. M. Y, H:i") }}</dd>
-                    <dt>Dependencies</dt>
-                    <dd>
-                        <ul>
-                        {% if dependencies|length > 0 %}
-                            {% for spec in dependencies %}
-                                <li><a href="/packages/{{ loop.key }}">{{ loop.key }}</a> {{ spec }}</li>
-                            {% endfor %}
-                        {% else %}
-                            <li>none</li>
-                        {% endif %}
-                        </ul>
-                    </dd>
-                    {% if engines|length > 0 %}
-                        <dt>Engines</dt>
-                        <dd>
-                            <ul>
-                            {% for spec in engines %}
-                                <li>{{ loop.key }} ({{ spec }})</li>
-                            {% endfor %}
-                            </ul>
-                        </dd>
-                    {% endif %}
-                    <dt>Download</dt>
-                    <dd><a href="/download/{{ version.filename }}">{{ version.filename }}</a> ({{ version.filesize | filesize }})</dd>
-                    {% if repositories|length > 0 %}
-                        <dt>Repositories</dt>
-                        <dd>
-                            <ul>
-                            {% for repo in repositories %}
-                                <li>{{ repo.type }}: <a href="{{ repo.url }}{{ repo.path }}">{{ repo.url }}{{ repo.path }}</a></li>
-                            {% endfor %}
-                            </ul>
-                        </dd>
-                    {% endif %}
-                    {% if licenses|length > 0 %}
-                        <dt>Licenses</dt>
-                        <dd>
-                            <ul>
-                            {% for license in licenses %}
-                                <li><a href="{{ license.url }}">{{ license.type }}</a></li>
-                            {% endfor %}
-                            </ul>
-                        </dd>
-                    {% endif %}
-                    <dt class="checksums">Checksums</dt>
-                    <dd class="checksums">
-                        <dl>
-                            <dt>md5</dt>
-                            <dd>{{ checksums.md5 }}</dd>
-                            <dt>sha1</dt>
-                            <dd>{{ checksums.sha1 }}</dd>
-                            <dt>sha256</dt>
-                            <dd>{{ checksums.sha256 }}</dd>
-                        </dl>
-                    </dd>
-                </dl>
-            </dd>
-        {% endfor %}
+
     </script>
 </body>
 </html>

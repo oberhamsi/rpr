@@ -167,30 +167,6 @@ header h1 a {
 }
 
 /*** sections ***/
-ul.menu {
-    overflow: auto;
-    margin-top: 2px;
-    margin-bottom: 5px;
-}
-
-ul.menu li {
-    cursor: pointer;
-    color: #999;
-    float: left;
-    padding-right: 5px;
-}
-
-ul.menu li:before {
-    content: "\0025ba\0000a0";
-}
-
-ul.menu li.expanded {
-    color: #505466;
-}
-
-ul.menu li.expanded:before {
-    content: "\0025bc\0000a0";
-}
 
 dl.versions, dl.details {
     clear: left;
@@ -232,28 +208,4 @@ dl.versions > dt {
 
 dl.versions > dt:after {
     content: "";
-}
-
-dl dt.checksums:before {
-    content: "\0025ba\0000a0";
-    clear: left;
-}
-
-dl dt.checksums.expanded {
-    color: #666666;
-}
-
-dl dt.checksums.expanded:before {
-    content: "\0025bc\0000a0";
-}
-
-dl dt.checksums:after {
-    content: "";
-}
-
-dl dd.checksums {
-    display: none;
-    overflow: auto;
-    margin: 2px 0 10px 20px;
-    clear: left;
 }
